@@ -1,0 +1,55 @@
+{
+  "config": {
+    "paths": {
+      "train_path": "data/raw/KDDTrain+.txt",
+      "test_path": "data/raw/KDDTest+.txt",
+      "artifacts_dir": "artifacts"
+    },
+    "training": {
+      "seed": 42,
+      "val_ratio": 0.2,
+      "epochs": 20,
+      "batch_size": 64,
+      "lr": 0.01,
+      "threshold": 0.5
+    },
+    "model": {
+      "hidden1": 64,
+      "hidden2": 32,
+      "output": 1
+    }
+  },
+  "model": {
+    "best_or_final_model_path": "artifacts\\binary_model_weights_best.npz",
+    "artifact_dir": "artifacts"
+  },
+  "val": {
+    "epoch": 20,
+    "loss": 0.02278786607889139,
+    "acc": 0.9924985116094464,
+    "precision": 0.9922978177150192,
+    "recall": 0.99153412006157,
+    "f1": 0.991915821891441,
+    "rows": 25195,
+    "confusion": {
+      "tn": 13411,
+      "fp": 90,
+      "fn": 99,
+      "tp": 11595
+    }
+  },
+  "test": {
+    "acc": 0.7758605393896381,
+    "precision": 0.9256949004158459,
+    "recall": 0.6591599781812515,
+    "f1": 0.7700150197988258,
+    "rows": 22544,
+    "confusion": {
+      "tn": 9032,
+      "fp": 679,
+      "fn": 4374,
+      "tp": 8459
+    },
+    "loss": 1.419955934688919
+  }
+}

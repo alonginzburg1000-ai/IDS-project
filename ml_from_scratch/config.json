@@ -1,0 +1,31 @@
+{
+  "paths": {
+    "train_path": "data/raw/KDDTrain+.txt",
+    "test_path": "data/raw/KDDTest+.txt",
+    "artifacts_dir": "artifacts"
+  },
+  "training": {
+    "seed": 42,
+    "val_ratio": 0.2,
+    "epochs": 20,
+    "batch_size": 64,
+    "lr": 0.01,
+    "threshold": 0.5
+  },
+  "model": {
+    "hidden1": 64,
+    "hidden2": 32,
+    "output": 1
+  },
+  "multiclass": {
+    "seed": 42,
+    "val_ratio": 0.2,
+    "epochs": 20,
+    "batch_size": 64,
+    "lr": 0.01,
+    "hidden1": 100,
+    "hidden2": 100,
+    "num_classes": 4,
+    "preprocess_source": "artifacts/binary_preprocess.npz"
+  }
+}

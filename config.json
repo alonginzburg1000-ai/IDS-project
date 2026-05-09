@@ -1,0 +1,14 @@
+{
+  "flask_host": "127.0.0.1",
+  "flask_port": 5000,
+  "binary_threshold": 0.55,
+  "scapy_interface": null,
+  "packet_limit": 0,
+  "log_level": "INFO",
+  "artifacts_path": "artifacts",
+  "agent_server_url": "http://127.0.0.1:5000/predict",
+  "agent_enabled": true,
+  "request_timeout_seconds": 3.0,
+  "logs_path": "logs",
+  "traffic_store_limit": 1000
+}

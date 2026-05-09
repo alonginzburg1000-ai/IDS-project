@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IDS Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="{{ url_for('static', filename='dashboard.js') }}"></script>
+  </head>
+  <body>
+    <main class="dashboard-shell">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">IDS Runtime</p>
+          <h1>לוח בקרה לזיהוי תעבורה</h1>
+          <p class="subtitle">תעבורה חיה, סיווג בינארי, וסיווג התקפות לפי המודל הרב-מחלקתי.</p>
+        </div>
+        <div class="header-actions">
+          <div class="status-card">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="status-text">מתחבר...</span>
+          </div>
+          <div class="sniffer-card">
+            <span class="sniffer-status" id="sniffer-status-text">הסנפה עצורה</span>
+            <div class="sniffer-buttons">
+              <button class="control-button start" id="start-sniffer" type="button">התחל הסנפה</button>
+              <button class="control-button stop" id="stop-sniffer" type="button">עצור הסנפה</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="metric-grid" aria-label="מדדי מערכת">
+        <article class="metric-card">
+          <span class="metric-label">כל הרשומות</span>
+          <strong id="traffic-count">0</strong>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">תעבורה חשודה</span>
+          <strong id="attack-count">0</strong>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Threshold בינארי</span>
+          <strong id="binary-threshold">0.55</strong>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Agent</span>
+          <strong id="agent-state">בודק...</strong>
+        </article>
+      </section>
+
+      <nav class="tabs" aria-label="לשוניות Dashboard">
+        <button class="tab-button active" data-tab="all-traffic">כל התעבורה</button>
+        <button class="tab-button" data-tab="suspicious-traffic">תעבורה חשודה</button>
+        <button class="tab-button" data-tab="attack-types">סיווג תעבורה חשודה</button>
+      </nav>
+
+      <section class="tab-panel active" id="all-traffic">
+        <div class="panel-header">
+          <h2>כל התעבורה</h2>
+          <p>כל packet שהגיע לשרת אחרי preprocessing ו-inference.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>timestamp</th>
+                <th>src_ip</th>
+                <th>dst_ip</th>
+                <th>src_port</th>
+                <th>dst_port</th>
+                <th>protocol</th>
+                <th>binary_prediction</th>
+                <th>binary_confidence</th>
+              </tr>
+            </thead>
+            <tbody id="traffic-table-body"></tbody>
+          </table>
+          <p class="empty-state" id="traffic-empty">אין עדיין תעבורה להצגה.</p>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="suspicious-traffic">
+        <div class="panel-header">
+          <h2>תעבורה חשודה</h2>
+          <p>רק רשומות שסווגו כ-attack על ידי המודל הבינארי.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>timestamp</th>
+                <th>src_ip</th>
+                <th>dst_ip</th>
+                <th>src_port</th>
+                <th>dst_port</th>
+                <th>protocol</th>
+                <th>attack_type</th>
+                <th>binary_confidence</th>
+              </tr>
+            </thead>
+            <tbody id="suspicious-table-body"></tbody>
+          </table>
+          <p class="empty-state" id="suspicious-empty">אין עדיין תעבורה חשודה.</p>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="attack-types">
+        <div class="panel-header">
+          <h2>סיווג תעבורה חשודה</h2>
+          <p>התפלגות סוגי ההתקפה לפי המודל הרב-מחלקתי.</p>
+        </div>
+        <div class="chart-card">
+          <canvas id="attack-type-chart" aria-label="גרף עוגה לסוגי התקפה"></canvas>
+          <p class="empty-state" id="chart-empty">אין עדיין התקפות לסיווג.</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

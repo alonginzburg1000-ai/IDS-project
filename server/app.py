@@ -29,7 +29,10 @@ from server.model_loader import load_runtime_models
 from server.preprocessing import BadPacketError
 from server.storage import TrafficStorage
 
-
+"""
+מאתחלת את שרת ה-Flask,
+ טוענת את מודלי הבינה המלאכותית ומגדירה את נתיבי ה-API
+"""
 def create_app(config: RuntimeConfig, start_agent: bool = False, agent_allowed: bool = True) -> Flask:
     logger = configure_logging(config, "ids.server", "server.log")
     attack_logger = build_json_file_logger(config, "ids.attack", "attacks.log")
@@ -133,7 +136,11 @@ def create_app(config: RuntimeConfig, start_agent: bool = False, agent_allowed: 
 
     return app
 
-
+"""
+מקבלת נתוני חבילת תקשורת,
+ מריצה עליהם את מודל ה-AI כדי לזהות מתקפות, 
+ שומרת את התוצאה בבסיס הנתונים ומפעילה לוגים בהתאם.
+"""
 def process_packet_payload(
     payload: Dict[str, Any],
     engine: InferenceEngine,
@@ -166,7 +173,10 @@ def process_packet_payload(
     )
     return result, stored_record
 
-
+"""
+מריצה בתוך תהליכון (Thread) נפרד וברקע את סוכן ה-Scapy שמסניף חבילות תקשורת בזמן אמת,
+ תוך הגנה מפני הרצות כפולות בעזרת Lock.
+"""
 def start_background_agent(app: Flask) -> Tuple[Dict[str, Any], int]:
     config: RuntimeConfig = app.config["IDS_CONFIG"]
     logger: logging.Logger = app.config["IDS_LOGGER"]
@@ -214,6 +224,11 @@ def start_background_agent(app: Flask) -> Tuple[Dict[str, Any], int]:
         return _sniffer_status(app, message="sniffer started"), 200
 
 
+"""
+עוצרת בצורה בטוחה את תהליכון הסנפת
+ החבילות על ידי סימון אירוע עצירה (Stop Event) 
+ והמתנה מוגדרת מראש לסיום הריצה שלו.
+"""
 def stop_background_agent(app: Flask) -> Tuple[Dict[str, Any], int]:
     agent_lock: Optional[Lock] = app.config.get("IDS_AGENT_LOCK")
     if agent_lock is None:
@@ -257,7 +272,11 @@ def _sniffer_status(app: Flask, message: Optional[str] = None) -> Dict[str, Any]
         payload["message"] = message
     return payload
 
+"""
+פונקציית עזר המארגנת ומאחדת את נתוני חבילת התקשורת ה
+גולמיים יחד עם תוצאות הניתוח של ה-AI למבנה נתונים אחיד
 
+"""
 def _build_traffic_record(
     payload: Dict[str, Any],
     result: Dict[str, Any],
@@ -286,7 +305,11 @@ def _build_traffic_record(
         "response_time_ms": response_time_ms,
     }
 
-
+"""
+פונקציית עזר השולפת את נתוני המתקפה מתוך רשומת 
+התעבורה וכותבת אותם בצורה 
+מרוכזת ופורמלית לקובץ לוג ייעודי למתקפות (attacks.log).
+"""
 def _log_attack(attack_logger: logging.Logger, record: Dict[str, Any]) -> None:
     attack_record = {
         "timestamp": record.get("timestamp"),

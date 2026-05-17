@@ -2,4 +2,5 @@ venv/
 logs/
 __pycache__/
 *.pyc
-
+tools/**/bin/
+tools/**/obj/
